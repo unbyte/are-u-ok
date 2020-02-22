@@ -30,7 +30,10 @@
     - `MAIL_PASS`: SMTP登陆用的密码
     - `MAIL_RECEIVER`:接收通知邮件的邮箱地址
 
-5. 完成，以防万一还是需要关注邮件或班干部通知
+5. 如果此前从未使用过`Github Action`，请进入fork后的项目的`Actions`页面，点击
+`I understand my workflows, go ahead and run them`才能开启定时打卡
+
+6. 完成，以防万一还是需要关注邮件或班干部通知
 
 ## 更新步骤
 1. 重新输密码版    
