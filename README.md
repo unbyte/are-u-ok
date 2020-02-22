@@ -33,10 +33,21 @@
 5. 完成，以防万一还是需要关注邮件或班干部通知
 
 ## 更新步骤
-1. 删除Fork后的项目，步骤如下
-    1. 进入Fork后的项目仓库，进入`Settings`页面
-    2. 在最底下找到`Delete this repository`，点击验证后删除
-2. 重新fork本项目，接下来的步骤同[使用步骤](#使用步骤)
+1. 重新输密码版    
+    1. 删除Fork后的项目，步骤如下    
+        1. 进入Fork后的项目仓库，进入`Settings`页面
+        2. 在最底下找到`Delete this repository`，点击验证后删除
+    2. 重新fork本项目，接下来的步骤同[使用步骤](#使用步骤)
+2. 无需重新输入密码版
+    1. 点击     
+    ![pull_request](https://user-images.githubusercontent.com/31768052/75086758-a9dedb80-552f-11ea-8de6-5cf8cc326005.png)
+    2. 点击     
+    ![new_pull_request](https://user-images.githubusercontent.com/31768052/75086760-ae0af900-552f-11ea-8ce5-9cd5476dbd50.png)
+    3. 根据图片选择    
+    ![select](https://user-images.githubusercontent.com/31768052/75086765-b06d5300-552f-11ea-9628-9f5e26c319cc.png)
+    4. 点击创建pull request     
+    ![$JT(V~PT0%APNLGQS{%DIIG](https://user-images.githubusercontent.com/31768052/75086768-b2371680-552f-11ea-85ec-590826e475c3.png)
+    5. 接着把绿色按钮按到没为止
 
 ## 开源协议
 
