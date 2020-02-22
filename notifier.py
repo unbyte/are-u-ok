@@ -2,6 +2,7 @@
 # -*- coding: UTF-8 -*-
 
 import smtplib
+import traceback
 from email.mime.text import MIMEText
 from email.header import Header
 
@@ -36,8 +37,10 @@ class MailNotifier(Notifier):
             message = self._make_content(subject, content)
             svr.sendmail(self._user, self._receiver, message.as_string())
             print("send mail successfully")
-        except smtplib.SMTPException:
+        except Exception as e:
             print("fail to send mail")
+            print(e)
+            traceback.print_exc()
 
 
 class PrintNotifier(Notifier):
