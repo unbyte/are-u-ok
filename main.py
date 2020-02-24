@@ -13,13 +13,15 @@ if __name__ == '__main__':
         print(
             "Missing enough arguments, expect 6: user, pass, mail_host, mail_user, mail_pass, mail_receiver")
         exit(1)
-    if len(sys.argv) >7:
+    if len(sys.argv) > 7:
         print("Too many arguments")
         exit(1)
 
     job = Job(sys.argv[1], sys.argv[2])
 
-    if len(sys.argv) == 3:
+    if len(sys.argv) == 3 or "" in sys.argv[3:7]:
+        print("running without sending email")
         job.do(PrintNotifier())
     else:
+        print("running with sending email")
         job.do(MailNotifier(sys.argv[3], sys.argv[4], sys.argv[5], sys.argv[6]))
