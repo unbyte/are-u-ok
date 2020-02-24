@@ -23,15 +23,21 @@
     - `USER`: 学号
     - `PASS`: 密码
 
+    <p align="center"><img src="https://i.loli.net/2020/02/24/RAPvJ4qu5hUIr2K.png"/></p>
+    
     如果需要邮件通知，需要再设定以下secret:
 
     - `MAIL_HOST`: SMTP服务器地址，带上端口，如`smtp.ym.163.com:25` **不支持SSL**
     - `MAIL_USER`: SMTP登陆用的用户名
     - `MAIL_PASS`: SMTP登陆用的密码
     - `MAIL_RECEIVER`:接收通知邮件的邮箱地址
+    
+    设置好之后应该是这样的:
+    
+    <p align="center"><img src="https://i.loli.net/2020/02/24/na1A3y2EJZQukCx.png"/></p>
 
-5. 如果此前从未使用过`Github Action`，请进入fork后的项目的`Actions`页面，点击
-`I understand my workflows, go ahead and run them`才能开启定时打卡
+5. **如果此前从未使用过`Github Action`，请进入fork后的项目的`Actions`页面，点击
+`I understand my workflows, go ahead and run them`才能开启定时打卡**
 
 6. 完成，以防万一还是需要关注邮件或班干部通知
 
@@ -43,13 +49,13 @@
     2. 重新fork本项目，接下来的步骤同[使用步骤](#使用步骤)
 2. 无需重新输入密码版
     1. 点击     
-    ![pull_request](https://user-images.githubusercontent.com/31768052/75086758-a9dedb80-552f-11ea-8de6-5cf8cc326005.png)
+    <p align="center"><img src="https://user-images.githubusercontent.com/31768052/75086758-a9dedb80-552f-11ea-8de6-5cf8cc326005.png"/></p>
     2. 点击     
-    ![new_pull_request](https://user-images.githubusercontent.com/31768052/75086760-ae0af900-552f-11ea-8ce5-9cd5476dbd50.png)
+    <p align="center"><img src="https://user-images.githubusercontent.com/31768052/75086760-ae0af900-552f-11ea-8ce5-9cd5476dbd50.png"/></p>
     3. 根据图片选择    
-    ![select](https://user-images.githubusercontent.com/31768052/75086765-b06d5300-552f-11ea-9628-9f5e26c319cc.png)
+    <p align="center"><img src="https://user-images.githubusercontent.com/31768052/75086765-b06d5300-552f-11ea-9628-9f5e26c319cc.png"/></p>
     4. 点击创建pull request     
-    ![$JT(V~PT0%APNLGQS{%DIIG](https://user-images.githubusercontent.com/31768052/75086768-b2371680-552f-11ea-85ec-590826e475c3.png)
+    <p align="center"><img src="https://user-images.githubusercontent.com/31768052/75086768-b2371680-552f-11ea-85ec-590826e475c3.png"/></p>
     5. 接着把绿色按钮按到没为止
 
 ## 开源协议
