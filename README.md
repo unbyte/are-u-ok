@@ -28,16 +28,14 @@
 
 系统要求: 已安装`python`
 
-第一次使用:
+第一次使用流程:
 
 1. 下载本项目 `git clone https://github.com/unbyte/are-u-ok`
 2. 进入项目目录`cd are-u-ok`
 3. 安装依赖`pip install -r requirements.txt`
+4. 执行`python ./main.py 学号 密码`
 
-日常打卡:
-
-1. 执行`python ./main.py 学号 密码`
-
+之后日常打卡只需要执行`python ./main.py 学号 密码`
 
 
 ## 自动打卡步骤
@@ -55,7 +53,7 @@
     <p align="center"><img src="https://i.loli.net/2020/02/24/RAPvJ4qu5hUIr2K.png"/></p>
     如果需要邮件通知，需要再设定以下secret:
     
-- `MAIL_HOST`: SMTP服务器地址，带上端口，如`smtp.ym.163.com:25` **不支持SSL**
+    - `MAIL_HOST`: SMTP服务器地址，带上端口，如`smtp.ym.163.com:25` **不支持SSL**
     - `MAIL_USER`: SMTP登陆用的用户名
     - `MAIL_PASS`: SMTP登陆用的密码
     - `MAIL_RECEIVER`:接收通知邮件的邮箱地址
@@ -64,10 +62,22 @@
     
     <p align="center"><img src="https://i.loli.net/2020/02/24/na1A3y2EJZQukCx.png"/></p>
     
-5. **如果此前从未使用过`Github Action`，请进入fork后的项目的`Actions`页面，点击
-`I understand my workflows, go ahead and run them`才能开启定时打卡**
+5. **进入fork后的项目的`Actions`页面，如果有
+`I understand my workflows, go ahead and run them`按钮，请点击确认**
 
-6. 完成，以防万一还是需要关注邮件或班干部通知
+6. 为了激活自动签到，还需要提交一次commit，流程如下: 
+
+    1. 点击`README.md`的编辑按钮
+
+        <p align="center"><img src="https://i.loli.net/2020/03/01/8pnrtNDm9axih7U.png"/></p>
+    
+    2. 对内容随意做修改，只要有改动就行
+    
+    3. 点击编辑框下方的绿色按钮提交改动，就可以激活自动签到任务。
+    
+        <p align="center"><img src="https://i.loli.net/2020/03/01/6Yi59OyLwQRuVNm.png"/></p>
+
+7. 完成，以防万一还是需要关注邮件或班干部通知
 
 
 
@@ -78,7 +88,6 @@
 直接删除已下载脚本并重复[手动打卡步骤](#手动打卡步骤)即可
 
 
-
 ### 自动打卡
 
 - 重新Fork版 
@@ -86,7 +95,7 @@
     1. 删除Fork后的项目，步骤如下
        1. 进入Fork后的项目仓库，进入`Settings`页面
        2. 在最底下找到`Delete this repository`，点击验证后删除
-    2. 重新fork本项目，接下来的步骤同[使用步骤](#使用步骤)
+    2. 重新fork本项目，接下来的步骤同[自动打卡步骤](#自动打卡步骤)
 
 - Pull Request版(不需要重新设置secret)
     1. 点击
