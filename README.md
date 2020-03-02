@@ -66,8 +66,8 @@
     
 5. **如果此前从未使用过`Github Action`，请进入fork后的项目的`Actions`页面，点击
 `I understand my workflows, go ahead and run them`才能开启定时打卡**
-
-6. 完成，以防万一还是需要关注邮件或班干部通知
+6. 需要进行一次提交才能使用
+7. 完成，以防万一还是需要关注邮件或班干部通知
 
 
 
