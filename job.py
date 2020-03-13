@@ -41,6 +41,7 @@ class Job:
         "mqxxdz_cs": "",
         "mqxxdz_qx": "",
         "mqxxdz": "",
+        "mqjzdzsm": "居家学习",
         "jzsjhm": "",
 
         "mqzk": "A",
