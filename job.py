@@ -113,43 +113,43 @@ class Job:
     def _login(self) -> (bool, str):
         resp: Response = self._client.post(self._login_url, headers=self._login_header)
         try:
-            result: dict = json.loads(resp.content)
+            result: dict = json.loads(resp.text)
             if "access_token" in result:
                 self._token = result['access_token']
                 return True, ""
-            return False, resp.content
+            return False, resp.text
         except Exception:
             return False, self._unexpected_exception
 
     def _login_service(self) -> (bool, str):
         resp: Response = self._client.post(self._login_service_url, headers=self._login_service_header)
         try:
-            result: dict = json.loads(resp.content)
+            result: dict = json.loads(resp.text)
             if "success" in result and result["success"]:
                 self._client.get(self._visit_service_url.format(result["data"]))
                 return True, ""
-            return False, resp.content
+            return False, resp.text
         except Exception:
             return False, self._unexpected_exception
 
     def _get_info(self) -> (bool, str):
         resp: Response = self._client.get(self._get_info_url)
         try:
-            result: dict = json.loads(resp.content)
+            result: dict = json.loads(resp.text)
             if "success" in result and result["success"]:
                 self._info = result["data"]
                 return True, ""
-            return False, resp.content
+            return False, resp.text
         except Exception:
             return False, self._unexpected_exception
 
     def _update_info(self) -> (bool, str):
         resp: Response = self._client.post(self._update_info_url, json=self._request_data)
         try:
-            result: dict = json.loads(resp.content)
+            result: dict = json.loads(resp.text)
             if "success" in result and result["success"]:
                 return True, ""
-            return False, resp.content
+            return False, resp.text
         except Exception:
             return False, self._unexpected_exception
 
