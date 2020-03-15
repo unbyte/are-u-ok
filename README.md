@@ -114,7 +114,7 @@
     
         <p align="center"><img src="https://user-images.githubusercontent.com/31768052/75086768-b2371680-552f-11ea-85ec-590826e475c3.png"/></p>
     
-    5. 接着把绿色按钮按到没为止
+    5. 接着把绿色按钮按到没为止 
 
 ## 开源协议
 
