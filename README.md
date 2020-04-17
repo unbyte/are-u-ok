@@ -2,7 +2,6 @@
 > 东北大学学生防控信息统计系统自动化打卡脚本
 
 
-
 ## 目录
 
 - [平台更换须知](#平台更换须知)
@@ -70,6 +69,7 @@
     - `IP`: ip地址
 
     <p align="center"><img src="https://i.loli.net/2020/02/24/RAPvJ4qu5hUIr2K.png"/></p>
+    
     如果需要邮件通知，需要再设定以下secret:
     
     - `MAIL_HOST`: SMTP服务器地址，带上端口，如`smtp.ym.163.com:25` **不支持SSL**
