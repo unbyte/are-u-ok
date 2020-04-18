@@ -31,6 +31,8 @@ class Job:
 
     _token_matcher: Pattern = re.compile(r'name="_token" value="(.+?)"')
 
+    _name_matcher: Pattern = re.compile(r'当前用户：(.+?) <span')
+
     _class_matcher: Pattern = re.compile(r'"suoshubanji":"(.+?)"')
 
     _date_matcher: Pattern = re.compile(r'"created_on":"(.+?)"')
@@ -47,6 +49,7 @@ class Job:
 
         # 获取到的跨步骤共用中间信息
         self._token: str = ""
+        self._name: str = ""
         self._lt = ""
         self._login_path: str = ""
         self._class: str = ""
@@ -77,7 +80,7 @@ class Job:
 
     @property
     def _info_url(self) -> str:
-        return f'https://e-report.neu.edu.cn/api/profiles/{self._username}'
+        return f'https://e-report.neu.edu.cn/api/profiles/{self._username}?xingming={self._name}'
 
     @staticmethod
     def _is_login_success(resp: Response) -> bool:
@@ -112,6 +115,7 @@ class Job:
         try:
             resp: Response = self._client.get(self._service_url)
             self._token = self._token_matcher.findall(resp.text)[0]
+            self._name = self._name_matcher.findall(resp.text)[0]
             return True, ''
         except Exception as e:
             return False, self._unexpected_exception(e)
