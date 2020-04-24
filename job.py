@@ -122,14 +122,12 @@ class Job:
 
     def _get_info(self) -> (bool, str):
         try:
-            response = ""
             resp: Response = self._client.get(self._info_url)
-            response = resp.text.encode('unicode-escape').decode('unicode-escape')
-            if response.find(self._username) == -1:
+            if resp.text.find(self._username) == -1:
                 return False, self._bad_info
 
-            date = self._date_matcher.findall(response)
-            klass = self._class_matcher.findall(response)
+            date = self._date_matcher.findall(resp.text)
+            klass = self._class_matcher.findall(resp.text)
 
             if len(date) < 1 and len(klass) < 1:
                 return False, self._bad_info
