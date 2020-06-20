@@ -6,22 +6,23 @@ from job import Job
 from notifier import MailNotifier, PrintNotifier
 
 if __name__ == '__main__':
-    if len(sys.argv) < 3:
+    args_len = len(sys.argv)
+    if args_len < 3:
         print("Missing enough arguments, at least 2: user, pass")
         exit(1)
-    if 3 < len(sys.argv) < 7:
+    if 4 < args_len < 8:
         print(
-            "Missing enough arguments, expect 6: user, pass, mail_host, mail_user, mail_pass, mail_receiver")
+            "Missing enough arguments, expect 7: user, pass, ip, mail_host, mail_user, mail_pass, mail_receiver")
         exit(1)
-    if len(sys.argv) > 7:
+    if args_len > 8:
         print("Too many arguments")
         exit(1)
 
-    job = Job(sys.argv[1], sys.argv[2])
+    job = Job(sys.argv[1], sys.argv[2], sys.argv[3] if args_len > 3 else '')
 
-    if len(sys.argv) == 3 or "" in sys.argv[3:7]:
+    if args_len <= 4 or "" in sys.argv[4:8]:
         print("running without sending email")
         job.do(PrintNotifier())
     else:
         print("running with sending email")
-        job.do(MailNotifier(sys.argv[3], sys.argv[4], sys.argv[5], sys.argv[6]))
+        job.do(MailNotifier(sys.argv[4], sys.argv[5], sys.argv[6], sys.argv[7]))

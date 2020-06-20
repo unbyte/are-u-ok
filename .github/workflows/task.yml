@@ -5,7 +5,7 @@ on:
     branches:
       - master
   schedule:
-    - cron:  '0 0-3 * * *'
+    - cron:  '0 0-2 * * *'
 
 
 jobs:
@@ -25,4 +25,4 @@ jobs:
           pip install -r requirements.txt
       - name: Run
         run: |
-          python ./main.py "${{ secrets.USER }}" "${{ secrets.PASS }}" "${{ secrets.MAIL_HOST }}" "${{ secrets.MAIL_USER }}" "${{ secrets.MAIL_PASS }}" "${{ secrets.MAIL_RECEIVER }}"
+          python ./main.py "${{ secrets.USER }}" "${{ secrets.PASS }}" "${{ secrets.IP }}" "${{ secrets.MAIL_HOST }}" "${{ secrets.MAIL_USER }}" "${{ secrets.MAIL_PASS }}" "${{ secrets.MAIL_RECEIVER }}"
