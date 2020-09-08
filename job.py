@@ -1,13 +1,21 @@
 #!/usr/bin/python
 # -*- coding: UTF-8 -*-
-
 import re
 import time
+from datetime import timedelta, timezone, datetime
+from random import randint
 from re import Pattern
 
 from requests import session, Response, Session
 
 from notifier import Notifier
+
+shanghai_tz = timezone(timedelta(hours=8), name='Asia/Shanghai')
+
+
+def get_current_hour() -> int:
+    now = datetime.utcnow().replace(tzinfo=timezone.utc)
+    return now.astimezone(shanghai_tz).hour
 
 
 class Job:
@@ -82,6 +90,20 @@ class Job:
     def _info_url(self) -> str:
         return f'https://e-report.neu.edu.cn/api/profiles/{self._username}?xingming={self._name}'
 
+    @property
+    def _body_temperature(self) -> float:
+        return 36 + randint(4, 7) / 10
+
+    @property
+    def _report_body_temperature_url(self) -> str:
+        hour = get_current_hour()
+        item_id = 1 if 7 <= hour <= 9 else 2 if 12 <= hour <= 14 else 3
+        return f'https://e-report.neu.edu.cn/inspection/items/{item_id}/records'
+
+    @property
+    def _report_body_temperature_body(self) -> str:
+        return f'_token={self._token}&temperature={self._body_temperature}&suspicious_respiratory_symptoms=0&symptom_descriptions='
+
     @staticmethod
     def _is_login_success(resp: Response) -> bool:
         return resp.url.startswith("https://e-report.neu.edu.cn")
@@ -150,6 +172,18 @@ class Job:
         except Exception as e:
             return False, self._unexpected_exception(e)
 
+    def _report_body_temperature(self):
+        try:
+            resp: Response = self._client.post(self._report_body_temperature_url,
+                                               data=self._report_body_temperature_body,
+                                               headers=self._update_info_header)
+            print(resp.status_code)
+            if resp.status_code == 200:
+                return True, ""
+            return False, resp.text
+        except Exception as e:
+            return False, self._unexpected_exception(e)
+
     def do(self, notifier: Notifier):
         today = time.strftime('%m/%d/%Y')
 
@@ -169,186 +203,17 @@ class Job:
             notifier.send(f"{today} 获取已有信息失败", msg)
             return
         # 是否今日有签到过
-        if self._is_reported():
-            notifier.send(f"{today} 今日已有打卡记录", "避免重复打卡，本次打卡终止")
-            return
-        # 打卡
-        success, msg = self._update_info()
+        if not self._is_reported():
+            # 打卡
+            success, msg = self._update_info()
+            if not success:
+                notifier.send(f"{today} 打卡失败", msg)
+                return
+            notifier.send(f"{today} 打卡成功", "I'm fine, thank you.")
+
+        # 上报体温
+        success, msg = self._report_body_temperature()
         if not success:
-            notifier.send(f"{today} 打卡失败", msg)
+            notifier.send(f"{today} 上报体温失败", msg)
             return
-        notifier.send(f"{today} 打卡成功", "I'm fine, thank you.")
-
-
-"""
-DEPRECATED 
-因平台变更，以下实现已废弃
-"""
-"""
-class Job:
-    _login_header: dict = {"Authorization": "Basic dnVlOnZ1ZQ=="}
-
-    _login_service_url: str = "http://stuinfo.neu.edu.cn/cloud-xxbl/studenLogin"
-
-    _visit_service_url: str = "http://stuinfo.neu.edu.cn/cloud-xxbl/studentinfo?tag={}"
-
-    _get_info_url: str = "http://stuinfo.neu.edu.cn/cloud-xxbl/getStudentInfo"
-
-    _update_info_url: str = "http://stuinfo.neu.edu.cn/cloud-xxbl/updateStudentInfo"
-
-    _full_request_data: dict = {
-        "xm": "",
-        "xh": "",
-        "xy": "",
-        "njjzy": "",
-        "bj": "",
-        "xq": "",
-        "ss": "",
-        "qy": "",
-        "fjh": "",
-        "brsjhm": "",
-        "sylx": "",
-        "jtxxdz_sf": "",
-        "jtxxdz_cs": "",
-        "jtxxdz_qx": "",
-        "jtxxdz": "",
-        "mqxxdz_sf": "",
-        "mqxxdz_cs": "",
-        "mqxxdz_qx": "",
-        "mqxxdz": "",
-        "mqjzdzsm": "居家学习",
-        "jzsjhm": "",
-
-        "mqzk": "A",
-        "zjtw": "",
-        "zzkssj": "",
-        "sfjy": "",
-        "sfyqjc": "",
-        "mqsfzj": "",
-        "jtms": "",
-        "glyyms": "",
-        "gldxxdz_sf": "",
-        "gldxxdz": "",
-        "mqstzk": "",
-        "sfgcyiqz": "否",
-        "cjlqk": "曾经医学观察，后隔离解除",
-        "dsjtqkms": "",
-        "hjnznl": "家",
-        "qgnl": "无",
-        "sfqtdqlxs": "否",
-        "sfqtdqlxsmsxj": "",
-        "sfjcgbr": "否",
-        "sfjcgbrmsxj": "",
-        "sfjcglxsry": "否",
-        "sfjcglxsrymsxj": "",
-        "sfjcgysqzbr": "否",
-        "sfjcgysqzbrmsxj": "",
-        "sfjtcyjjfbqk": "否",
-        "sfjtcyjjfbqkmsxj": "",
-        "sfqgfrmz": "否",
-        "yljgmc": "",
-        "zzzd": "",
-        "sfygfr": "无",
-        "zgtw": "",
-        "zgtwcxsj": "",
-        "sfyghxdbsy": "无",
-        "sfyghxdbsycxsj": "",
-        "sfygxhdbsy": "无",
-        "sfygxhdbsycxsj": "",
-        "sfbrtb": "是",
-        "fdysfty": "否",
-        "tbrxm": "",
-        "tbrxh": "",
-        "tbrxy": "",
-        "dtyy": "",
-        "id": ""
-    }
-    _unexpected_exception: str = "网络错误或其他错误"
-
-    def __init__(self, username: str, password: str):
-        self._username: str = username
-        self._password: str = password
-        self._token: str = ""
-        self._info: dict = {}
-        self._tag: str = ""
-        self._client: Session = session()
-
-    @property
-    def _login_url(self) -> str:
-        return f'http://stuinfo.neu.edu.cn/api/auth/oauth/token?username={self._username}&grant_type=password&password={self._password}&imageCodeResult=&imageKey= '
-
-    @property
-    def _login_service_header(self) -> dict:
-        return {"Authorization": f"Bearer {self._token}"}
-
-    @property
-    def _request_data(self) -> dict:
-        return {**self._full_request_data, **{k: v for k, v in self._info.items() if k in self._full_request_data}}
-
-    def _login(self) -> (bool, str):
-        resp: Response = self._client.post(self._login_url, headers=self._login_header)
-        try:
-            result: dict = json.loads(resp.text)
-            if "access_token" in result:
-                self._token = result['access_token']
-                return True, ""
-            return False, resp.text
-        except Exception:
-            return False, self._unexpected_exception
-
-    def _login_service(self) -> (bool, str):
-        resp: Response = self._client.post(self._login_service_url, headers=self._login_service_header)
-        try:
-            result: dict = json.loads(resp.text)
-            if "success" in result and result["success"]:
-                self._client.get(self._visit_service_url.format(result["data"]))
-                return True, ""
-            return False, resp.text
-        except Exception:
-            return False, self._unexpected_exception
-
-    def _get_info(self) -> (bool, str):
-        resp: Response = self._client.get(self._get_info_url)
-        try:
-            result: dict = json.loads(resp.text)
-            if "success" in result and result["success"]:
-                self._info = result["data"]
-                return True, ""
-            return False, resp.text
-        except Exception:
-            return False, self._unexpected_exception
-
-    def _update_info(self) -> (bool, str):
-        resp: Response = self._client.post(self._update_info_url, json=self._request_data)
-        try:
-            result: dict = json.loads(resp.text)
-            if "success" in result and result["success"]:
-                return True, ""
-            return False, resp.text
-        except Exception:
-            return False, self._unexpected_exception
-
-    def do(self, notifier: Notifier):
-        today = time.strftime('%m/%d/%Y')
-        # 登陆
-        success, msg = self._login()
-        if not success:
-            notifier.send(f"{today} 登陆失败", msg)
-            return
-        # 进入平台
-        success, msg = self._login_service()
-        if not success:
-            notifier.send(f"{today} 鉴权失败", msg)
-            return
-        # 获取信息
-        success, msg = self._get_info()
-        if not success:
-            notifier.send(f"{today} 获取已有信息失败", msg)
-            return
-        # 打卡
-        success, msg = self._update_info()
-        if not success:
-            notifier.send(f"{today} 打卡失败", msg)
-            return
-        notifier.send(f"{today} 打卡成功", "I'm fine, thank you.")
-"""
+        notifier.send(f"{today} 上报体温成功", "I'm fine, really thank you.")
