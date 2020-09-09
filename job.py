@@ -145,18 +145,17 @@ class Job:
     def _get_info(self) -> (bool, str):
         try:
             resp: Response = self._client.get(self._info_url)
-
             if resp.text.find(self._username) == -1:
                 return False, self._bad_info
 
             date = self._date_matcher.findall(resp.text)
             klass = self._class_matcher.findall(resp.text)
 
-            if len(date) < 1 or len(klass) < 1:
+            if len(date) < 1 and len(klass) < 1:
                 return False, self._bad_info
 
             self._date = date[0]
-            self._class = klass[0]
+            self._class = self._class = None if len(klass) == 0 else klass[0]
 
             return True, ''
         except Exception as e:
